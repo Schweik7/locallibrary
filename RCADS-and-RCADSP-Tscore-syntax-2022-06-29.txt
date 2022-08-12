@@ -1,0 +1,719 @@
+﻿**COMMENT: The following is SPSS syntax for batch scoring for the 47-item RCADS Child version. (note: syntax for the RCADS-Parent version is below):
+ This syntax creates total raw scores and T-scores for each RCADS subscale. In order for this syntax to work, the following variables must be in your SPSS database.
+
+
+**NEEDED VARIABLES IN SPSS. 
+grade
+sex (note: boys should be coded as "1", and girls should be coded as "2")
+rcads01
+rcads02
+rcads03
+rcads04
+rcads05
+rcads06
+rcads07
+rcads08
+rcads09
+rcads10
+rcads11
+rcads12
+rcads13
+rcads14
+rcads15
+rcads16
+rcads17
+rcads18
+rcads19
+rcads20
+rcads21
+rcads22
+rcads23
+rcads24
+rcads25
+rcads26
+rcads27
+rcads28
+rcads29
+rcads30
+rcads31
+rcads32
+rcads33
+rcads34
+rcads35
+rcads36
+rcads37
+rcads38
+rcads39
+rcads40
+rcads41
+rcads42
+rcads43
+rcads44
+rcads45
+rcads46
+rcads47
+
+
+***This counts the number of missing items per RCADS-C subscale. 
+COMPUTE RCADS_sad_missing = NMISS (rcads05, rcads09, rcads17, rcads18, rcads33, rcads46, rcads45).
+COMPUTE RCADS_gad_missing  = NMISS (rcads01, rcads13, rcads22, rcads27, rcads35, rcads37).
+COMPUTE RCADS_pd_missing = NMISS (rcads03, rcads14, rcads24, rcads26, rcads28, rcads34, rcads36, rcads39, rcads41).
+COMPUTE RCADS_soc_missing = NMISS (rcads04, rcads07, rcads08, rcads12, rcads20, rcads30, rcads32, rcads38, rcads43).
+COMPUTE RCADS_ocd_missing  = NMISS (rcads10, rcads16, rcads23, rcads31, rcads42, rcads44).
+COMPUTE RCADS_mdd_missing = NMISS (rcads02, rcads06, rcads11, rcads15, rcads19, rcads21, rcads25, rcads29, rcads40, rcads47).
+COMPUTE RCADS_Depression_Total_missing = NMISS (rcads02, rcads06, rcads11, rcads15, rcads19, rcads21, rcads25, rcads29, rcads40, rcads47).
+COMPUTE RCADS_Anxiety_Total_missing  = NMISS (rcads01, rcads03, rcads04, rcads05, rcads07, rcads08, rcads09, rcads10, rcads12, rcads13, 
+rcads14, rcads16, rcads17, rcads18, rcads20, rcads22, rcads23, rcads24, rcads26, rcads27, rcads28, rcads30, rcads31, rcads32, rcads33, rcads34, 
+rcads35, rcads36, rcads37, rcads38, rcads39, rcads41, rcads42, rcads43, rcads44, rcads45, rcads46).
+COMPUTE RCADS_Total_Score_missing = NMISS (rcads01, rcads03, rcads04, rcads05, rcads07, rcads08, rcads09, rcads10, rcads12, rcads13, 
+rcads14, rcads16, rcads17, rcads18, rcads20, rcads22, rcads23, rcads24, rcads26, rcads27, rcads28, rcads30, rcads31, rcads32, rcads33, rcads34, 
+rcads35, rcads36, rcads37, rcads38, rcads39, rcads41, rcads42, rcads43, rcads44, rcads45, rcads46,  rcads02, rcads06, rcads11, rcads15, rcads19, 
+rcads21, rcads25, rcads29, rcads40, rcads47).
+Execute.
+
+
+
+***This creates and computes the raw scores for each subscale (not taking into account missing items). 
+COMPUTE RCADS_sad_raw = SUM ( rcads05, rcads09, rcads17, rcads18, rcads33, rcads45, rcads46).
+COMPUTE RCADS_gad_raw  = SUM ( rcads01, rcads13, rcads22, rcads27, rcads35, rcads37).
+COMPUTE RCADS_pd_raw = SUM ( rcads03, rcads14, rcads24, rcads26, rcads28, rcads34, rcads36, rcads39, rcads41).
+COMPUTE RCADS_soc_raw = SUM ( rcads04, rcads07, rcads08, rcads12, rcads20, rcads30, rcads32, rcads38, rcads43).
+COMPUTE RCADS_ocd_raw  = SUM ( rcads10, rcads16, rcads23, rcads31, rcads42, rcads44).
+COMPUTE RCADS_mdd_raw = SUM ( rcads02, rcads06, rcads11, rcads15, rcads19, rcads21, rcads25, rcads29, rcads40, rcads47).
+COMPUTE RCADS_Depression_Total_raw = SUM ( rcads02, rcads06, rcads11, rcads15, rcads19, rcads21, rcads25, rcads29, rcads40, rcads47).
+COMPUTE RCADS_Anxiety_Total_raw  = SUM (rcads01, rcads03, rcads04, rcads05, rcads07, rcads08, rcads09, rcads10, rcads12, rcads13, 
+rcads14, rcads16, rcads17, rcads18, rcads20, rcads22, rcads23, rcads24, rcads26, rcads27, rcads28, rcads30, rcads31, rcads32, rcads33, rcads34, 
+rcads35, rcads36, rcads37, rcads38, rcads39, rcads41, rcads42, rcads43, rcads44, rcads45, rcads46).
+COMPUTE RCADS_Total_Score_raw = SUM (rcads01, rcads03, rcads04, rcads05, rcads07, rcads08, rcads09, rcads10, rcads12, rcads13, 
+rcads14, rcads16, rcads17, rcads18, rcads20, rcads22, rcads23, rcads24, rcads26, rcads27, rcads28, rcads30, rcads31, rcads32, rcads33, rcads34, 
+rcads35, rcads36, rcads37, rcads38, rcads39, rcads41, rcads42, rcads43, rcads44, rcads45, rcads46,  rcads02, rcads06, rcads11, rcads15, rcads19, 
+rcads21, rcads25, rcads29, rcads40, rcads47).
+Execute.
+
+
+
+**This prorates each RCADS-C subscale raw score, adjusting for missing data (via mean replacement). 
+IF RCADS_sad_missing LE 2 RCADS_sad_raw = (RCADS_sad_raw/(7-RCADS_sad_missing))*7.
+IF RCADS_gad_missing LE 2 RCADS_gad_raw = (RCADS_gad_raw/(6-RCADS_gad_missing))*6.
+IF RCADS_pd_missing LE 2 RCADS_pd_raw = (RCADS_pd_raw/(9-RCADS_pd_missing))*9.
+IF RCADS_soc_missing LE 2 RCADS_soc_raw = (RCADS_soc_raw/(9-RCADS_soc_missing))*9.
+IF RCADS_ocd_missing LE 2 RCADS_ocd_raw = (RCADS_ocd_raw/(6-RCADS_ocd_missing))*6.
+IF RCADS_mdd_missing LE 2 RCADS_mdd_raw = (RCADS_mdd_raw/(10-RCADS_mdd_missing))*10.
+IF RCADS_Depression_Total_missing LE 2 RCADS_Depression_Total_raw = (RCADS_Depression_Total_raw/(10-RCADS_Depression_Total_missing))*10.
+IF RCADS_Anxiety_Total_missing LE 10 RCADS_Anxiety_Total_raw = (RCADS_Anxiety_Total_raw/(37-RCADS_Anxiety_Total_missing))*37.
+IF RCADS_Total_Score_missing LE 12 RCADS_Total_Score_raw = (RCADS_Total_Score_raw/(47-RCADS_Total_Score_missing))*47.
+Execute. 
+
+
+**This deletes all RCADS-C subscale raw scores that have more than the allowable amount of missing data. 
+IF RCADS_sad_missing > 2 RCADS_sad_raw = $SYSMIS.
+IF RCADS_gad_missing > 2 RCADS_gad_raw = $SYSMIS.
+IF RCADS_pd_missing > 2 RCADS_pd_raw = $SYSMIS.
+IF RCADS_soc_missing > 2 RCADS_soc_raw = $SYSMIS.
+IF RCADS_ocd_missing > 2 RCADS_ocd_raw = $SYSMIS.
+IF RCADS_mdd_missing > 2 RCADS_mdd_raw = $SYSMIS.
+IF RCADS_Depression_Total_missing > 2 RCADS_Depression_Total_raw = $SYSMIS.
+Execute. 
+IF RCADS_Anxiety_Total_missing > 10 
+or RCADS_sad_missing > 2
+or RCADS_gad_missing > 2
+or RCADS_pd_missing > 2
+or RCADS_soc_missing > 2
+or RCADS_ocd_missing > 2 RCADS_Anxiety_Total_raw = $SYSMIS.
+Execute. 
+IF RCADS_Total_Score_missing > 12 
+or RCADS_sad_missing > 2
+or RCADS_gad_missing > 2
+or RCADS_pd_missing > 2
+or RCADS_soc_missing > 2
+or RCADS_ocd_missing > 2 
+or RCADS_mdd_missing > 2 RCADS_Total_Score_raw = $SYSMIS.
+Execute. 
+
+
+
+***This creates and computes the T-scores for each RCADS-C subscale. 
+IF (grade le 4) AND (sex = 1) RCADS_MDD_T = ((RCADS_MDD_raw - 8.25 )*10)/ 4.09 + 50.
+IF (grade le 4) AND (sex = 1) RCADS_GAD_T = ((RCADS_GAD_raw - 6.98 )*10)/ 3.36 + 50.
+IF (grade le 4) AND (sex = 1) RCADS_OCD_T = ((RCADS_OCD_raw - 6.15)*10)/ 3.2+ 50.
+IF (grade le 4) AND (sex = 1) RCADS_PD_T = ((RCADS_PD_raw - 5.25)*10)/ 4.15+ 50.
+IF (grade le 4) AND (sex = 1) RCADS_SAD_T = ((RCADS_SAD_raw - 4.87)*10)/ 3.93 + 50.
+IF (grade le 4) AND (sex = 1) RCADS_SOC_T = ((RCADS_SOC_raw - 9.77)*10)/ 4.51 + 50.
+IF (grade le 4) AND (sex = 1) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 32.88)*10)/ 14.46 + 50.
+IF (grade le 4) AND (sex = 1) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 41.08)*10)/ 17.13 + 50.
+
+ 
+IF (grade le 4) AND (sex = 2) RCADS_MDD_T = ((RCADS_MDD_raw - 8.74)*10)/ 4.75+ 50.
+IF (grade le 4) AND (sex = 2) RCADS_GAD_T = ((RCADS_GAD_raw - 7.77)*10)/ 3.77+ 50.
+IF (grade le 4) AND (sex = 2) RCADS_OCD_T = ((RCADS_OCD_raw - 7.62)*10)/ 3.68+ 50.
+IF (grade le 4) AND (sex = 2) RCADS_PD_T = ((RCADS_PD_raw - 6.51)*10)/ 4.73 + 50.
+IF (grade le 4) AND (sex = 2) RCADS_SAD_T = ((RCADS_SAD_raw - 7.05)*10)/ 4.31+ 50.
+IF (grade le 4) AND (sex = 2) RCADS_SOC_T = ((RCADS_SOC_raw - 11.61)*10)/ 4.98+ 50.
+IF (grade le 4) AND (sex = 2) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 40.43 )*10)/ 17.32 + 50.
+IF (grade le 4) AND (sex = 2) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 49.09 )*10)/ 21.05 + 50.
+
+ 
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_MDD_T = ((RCADS_MDD_raw - 7.07) *10)/ 3.64+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_GAD_T = ((RCADS_GAD_raw - 6.44) *10)/ 3.13 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_OCD_T = ((RCADS_OCD_raw - 6.01) *10)/ 3.26 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_PD_T = ((RCADS_PD_raw - 4.06) *10)/ 3.6+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_SAD_T = ((RCADS_SAD_raw - 3.2) *10)/ 3.05+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_SOC_T = ((RCADS_SOC_raw - 10.30 )*10)/ 4.75+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 29.88 )*10)/ 13.12 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 36.94 )*10)/ 15.32 + 50.
+
+ 
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_MDD_T = ((RCADS_MDD_raw - 7.64)*10)/  4.1+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_GAD_T = ((RCADS_GAD_raw - 8.01)*10)/ 3.68 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_OCD_T = ((RCADS_OCD_raw - 6.39)*10)/ 3.46+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_PD_T = ((RCADS_PD_raw -   5.25 )*10)/ 4.3 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_SAD_T = ((RCADS_SAD_raw - 4.74)*10)/ 3.78+ 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_SOC_T = ((RCADS_SOC_raw - 12.92)*10)/ 5.21 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 37.10 )*10)/ 16.18 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 44.68)*10)/ 19.32 + 50.
+
+ 
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_MDD_T = ((RCADS_MDD_raw - 6.71) *10)/ 3.64+ 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_GAD_T = ((RCADS_GAD_raw - 6.2) *10)/  3.14+ 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_OCD_T = ((RCADS_OCD_raw - 5.22 ) *10)/  3.40 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_PD_T = ((RCADS_PD_raw - 3.62  ) *10)/  3.36 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_SAD_T = ((RCADS_SAD_raw - 2.26) *10)/  2.47+ 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_SOC_T = ((RCADS_SOC_raw - 11.05 )*10)/  4.74  + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 28.60 )*10)/ 13.10 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 35.34 )*10)/ 15.32 + 50.
+
+ 
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_MDD_T = ((RCADS_MDD_raw - 7.89)*10)/ 3.91 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_GAD_T = ((RCADS_GAD_raw - 7.42)*10)/  3.16+ 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_OCD_T = ((RCADS_OCD_raw - 5.12)*10)/  3.34 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_PD_T = ((RCADS_PD_raw -  5.03  )*10)/  3.92 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_SAD_T = ((RCADS_SAD_raw - 3.00  )*10)/  2.72+ 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_SOC_T = ((RCADS_SOC_raw - 13.01 )*10)/  4.94 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 33.53 )*10)/ 13.94 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 41.44)*10)/ 16.64 + 50.
+
+
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_MDD_T = ((RCADS_MDD_raw - 7.44) *10)/ 4.1+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_GAD_T = ((RCADS_GAD_raw - 7.07) *10)/  2.93+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_OCD_T = ((RCADS_OCD_raw - 4.65) *10)/  2.89+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_PD_T = ((RCADS_PD_raw - 3.76) *10)/  3.21+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_SAD_T = ((RCADS_SAD_raw - 2.5) *10)/  2.46+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_SOC_T = ((RCADS_SOC_raw - 11.68)*10)/  4.74+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 29.80 )*10)/ 12.77 + 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 37.26 )*10)/ 15.32 + 50.
+
+ 
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_MDD_T = ((RCADS_MDD_raw - 7.65)*10)/ 3.68+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_GAD_T = ((RCADS_GAD_raw - 7.28)*10)/  3.44+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_OCD_T = ((RCADS_OCD_raw - 4.12  )*10)/  2.79 + 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_PD_T = ((RCADS_PD_raw -  4.18)*10)/  3.07+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_SAD_T = ((RCADS_SAD_raw - 2.34)*10)/  2.23+ 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_SOC_T = ((RCADS_SOC_raw - 12.27)*10)/ 5.00   + 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 30.03 )*10)/ 12.75 + 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 37.65)*10)/ 14.98 + 50.
+
+
+IF (grade ge 11) AND (sex = 1) RCADS_MDD_T = ((RCADS_MDD_raw - 7.32) *10)/ 3.81+ 50.
+IF (grade ge 11) AND (sex = 1) RCADS_GAD_T = ((RCADS_GAD_raw - 6.76) *10)/  3.44+ 50.
+IF (grade ge 11) AND (sex = 1) RCADS_OCD_T = ((RCADS_OCD_raw - 5.18) *10)/ 3.12+ 50.
+IF (grade ge 11) AND (sex = 1) RCADS_PD_T = ((RCADS_PD_raw - 3.79) *10)/  2.71+ 50.
+IF (grade ge 11) AND (sex = 1) RCADS_SAD_T = ((RCADS_SAD_raw - 1.9) *10)/ 2.03+ 50.
+IF (grade ge 11) AND (sex = 1) RCADS_SOC_T = ((RCADS_SOC_raw - 10.67)*10)/ 4.49+ 50.
+IF (grade ge 11) AND (sex = 1) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 28.22)*10)/ 12.01 + 50.
+IF (grade ge 11) AND (sex = 1) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 35.51)*10)/ 14.53 + 50.
+
+ 
+IF (grade ge 11) AND (sex = 2) RCADS_MDD_T = ((RCADS_MDD_raw - 9.36)*10)/ 4.45+ 50.
+IF (grade ge 11) AND (sex = 2) RCADS_GAD_T = ((RCADS_GAD_raw - 8.49)*10)/ 3.71+ 50.
+IF (grade ge 11) AND (sex = 2) RCADS_OCD_T = ((RCADS_OCD_raw - 5.48)*10)/ 3.82+ 50.
+IF (grade ge 11) AND (sex = 2) RCADS_PD_T = ((RCADS_PD_raw - 5.26)*10)/ 4.28+ 50.
+IF (grade ge 11) AND (sex = 2) RCADS_SAD_T = ((RCADS_SAD_raw - 3.05)*10)/ 2.57+ 50.
+IF (grade ge 11) AND (sex = 2) RCADS_SOC_T = ((RCADS_SOC_raw - 12.85)*10)/ 4.98+ 50.
+IF (grade ge 11) AND (sex = 2) RCADS_Anxiety_Total_t = ((RCADS_Anxiety_Total_raw  - 34.98)*10)/ 14.87 + 50.
+IF (grade ge 11) AND (sex = 2) RCADS_Total_Score_t = ((RCADS_Total_Score_raw - 44.25 )*10)/ 18.29 + 50.
+execute.
+
+
+
+
+
+****Compute RCADS scale elevations. 
+Compute RCADS_TOTAL_Elevation = $SYSMIS.
+If RCADS_Total_Score_t < 65 RCADS_TOTAL_Elevation = 0.
+If RCADS_Total_Score_t GE 65 AND RCADS_Total_Score_t < 70 RCADS_TOTAL_Elevation = 1.
+If RCADS_Total_Score_t GE 70 RCADS_TOTAL_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_TOTAL_Elevation 'RCADS_TOTAL_Elevation'.
+VALUE LABELS
+RCADS_TOTAL_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADS_Depression_Elevation = $SYSMIS.
+If RCADS_MDD_T < 65 RCADS_Depression_Elevation = 0.
+If RCADS_MDD_T GE 65 AND RCADS_MDD_T < 70 RCADS_Depression_Elevation = 1.
+If RCADS_MDD_T GE 70 RCADS_Depression_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_Depression_Elevation 'RCADS_Depression_Elevation'.
+VALUE LABELS
+RCADS_Depression_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+
+Compute RCADS_Anxiety_Elevation = $SYSMIS.
+If RCADS_Anxiety_Total_t < 65 RCADS_Anxiety_Elevation = 0.
+If RCADS_Anxiety_Total_t GE 65 AND RCADS_Anxiety_Total_t < 70 RCADS_Anxiety_Elevation = 1.
+If RCADS_Anxiety_Total_t GE 70 RCADS_Anxiety_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_Anxiety_Elevation 'RCADS_Anxiety_Elevation'.
+VALUE LABELS
+RCADS_Anxiety_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADS_GAD_Elevation = $SYSMIS.
+If RCADS_GAD_T < 65 RCADS_GAD_Elevation = 0.
+If RCADS_GAD_T GE 65 AND RCADS_GAD_T < 70 RCADS_GAD_Elevation = 1.
+If RCADS_GAD_T GE 70 RCADS_GAD_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_GAD_Elevation 'RCADS_GAD_Elevation'.
+VALUE LABELS
+RCADS_GAD_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADS_OCD_Elevation = $SYSMIS.
+If RCADS_OCD_T < 65 RCADS_OCD_Elevation = 0.
+If RCADS_OCD_T GE 65 AND RCADS_OCD_T < 70 RCADS_OCD_Elevation = 1.
+If RCADS_OCD_T GE 70 RCADS_OCD_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_OCD_Elevation 'RCADS_OCD_Elevation'.
+VALUE LABELS
+RCADS_OCD_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADS_PANIC_Elevation = $SYSMIS.
+If RCADS_PD_T < 65 RCADS_PANIC_Elevation = 0.
+If RCADS_PD_T GE 65 AND RCADS_PD_T < 70 RCADS_PANIC_Elevation = 1.
+If RCADS_PD_T GE 70 RCADS_PANIC_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_PANIC_Elevation 'RCADS_PANIC_Elevation'.
+VALUE LABELS
+RCADS_PANIC_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADS_SEPARATION_Elevation = $SYSMIS.
+If RCADS_SAD_T < 65 RCADS_SEPARATION_Elevation = 0.
+If RCADS_SAD_T GE 65 AND RCADS_SAD_T < 70 RCADS_SEPARATION_Elevation = 1.
+If RCADS_SAD_T GE 70 RCADS_SEPARATION_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_SEPARATION_Elevation 'RCADS_SEPARATION_Elevation'.
+VALUE LABELS
+RCADS_SEPARATION_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADS_SOCIAL_Elevation = $SYSMIS.
+If RCADS_SOC_T < 65 RCADS_SOCIAL_Elevation = 0.
+If RCADS_SOC_T GE 65 AND RCADS_SOC_T < 70 RCADS_SOCIAL_Elevation = 1.
+If RCADS_SOC_T GE 70 RCADS_SOCIAL_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADS_SOCIAL_Elevation 'RCADS_SOCIAL_Elevation'.
+VALUE LABELS
+RCADS_SOCIAL_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+FREQUENCIES VARIABLES= 
+RCADS_TOTAL_Elevation
+RCADS_Depression_Elevation 
+RCADS_Anxiety_Elevation
+RCADS_GAD_Elevation
+RCADS_OCD_Elevation
+RCADS_PANIC_Elevation
+RCADS_SEPARATION_Elevation
+RCADS_SOCIAL_Elevation
+  /ORDER=ANALYSIS.
+
+
+
+
+
+
+*********************************************************************************************************************************************************************************************************************************************************************************.
+
+**COMMENT: The following is SPSS syntax for batch scoring for the 47-item RCADS Parent Version. This syntax creates total raw scores and T-scores for each RCADS subscale. 
+**In order for this syntax to work, the following variables must be in your SPSS database.
+
+**NEEDED VARIABLES IN SPSS. 
+grade
+sex (note: boys should be coded as "1", and girls should be coded as "2")
+rcadsp01
+rcadsp02
+rcadsp03
+rcadsp04
+rcadsp05
+rcadsp06
+rcadsp07
+rcadsp08
+rcadsp09
+rcadsp10
+rcadsp11
+rcadsp12
+rcadsp13
+rcadsp14
+rcadsp15
+rcadsp16
+rcadsp17
+rcadsp18
+rcadsp19
+rcadsp20
+rcadsp21
+rcadsp22
+rcadsp23
+rcadsp24
+rcadsp25
+rcadsp26
+rcadsp27
+rcadsp28
+rcadsp29
+rcadsp30
+rcadsp31
+rcadsp32
+rcadsp33
+rcadsp34
+rcadsp35
+rcadsp36
+rcadsp37
+rcadsp38
+rcadsp39
+rcadsp40
+rcadsp41
+rcadsp42
+rcadsp43
+rcadsp44
+rcadsp45
+rcadsp46
+rcadsp47
+
+
+
+***This counts the number of missing items per RCADS-P subscale. 
+COMPUTE RCADSP_sad_missing = NMISS (rcadsp05, rcadsp09, rcadsp17, rcadsp18, rcadsp33, rcadsp45, rcadsp46).
+COMPUTE RCADSP_gad_missing = NMISS (rcadsp01, rcadsp13, rcadsp22, rcadsp27, rcadsp35, rcadsp37).
+COMPUTE RCADSP_mdd_missing = NMISS (rcadsp02, rcadsp06, rcadsp11, rcadsp15, rcadsp19, rcadsp21, rcadsp25, rcadsp29, rcadsp40, rcadsp47).
+COMPUTE RCADSP_pd_missing= NMISS (rcadsp03, rcadsp14, rcadsp24, rcadsp26, rcadsp28, rcadsp34, rcadsp36, rcadsp39, rcadsp41).
+COMPUTE RCADSP_soc_missing= NMISS (rcadsp04, rcadsp07, rcadsp08, rcadsp12, rcadsp20, rcadsp30, rcadsp32, rcadsp38, rcadsp43).
+COMPUTE RCADSP_ocd_missing = NMISS (rcadsp10, rcadsp16, rcadsp23, rcadsp31, rcadsp42, rcadsp44).
+COMPUTE RCADSP_Depression_Total_missing = NMISS (rcadsp02, rcadsp06, rcadsp11, rcadsp15, rcadsp19, rcadsp21, rcadsp25, rcadsp29, rcadsp40, rcadsp47).
+COMPUTE RCADSP_Anxiety_Total_missing = NMISS (rcadsp01, rcadsp03, rcadsp04, rcadsp05, rcadsp07, rcadsp08, rcadsp09, rcadsp10, rcadsp12, rcadsp13, 
+rcadsp14, rcadsp16, rcadsp17, rcadsp18, rcadsp20, rcadsp22, rcadsp23, rcadsp24, rcadsp26, rcadsp27, rcadsp28, rcadsp30, rcadsp31, rcadsp32, rcadsp33, 
+rcadsp34, rcadsp35, rcadsp36, rcadsp37, rcadsp38, rcadsp39, rcadsp41, rcadsp42, rcadsp43, rcadsp44, rcadsp45, rcadsp46).
+COMPUTE RCADSP_Total_Score_missing = NMISS (rcadsp01, rcadsp02, rcadsp03, rcadsp04, rcadsp05, rcadsp06, rcadsp07, rcadsp08, rcadsp09, rcadsp10, 
+rcadsp11, rcadsp12, rcadsp13, rcadsp14, rcadsp15, rcadsp16, rcadsp17, rcadsp18, rcadsp19, rcadsp20, rcadsp21, rcadsp22, rcadsp23, rcadsp24, rcadsp25, 
+rcadsp26, rcadsp27, rcadsp28, rcadsp29, rcadsp30, rcadsp31, rcadsp32, rcadsp33, rcadsp34, rcadsp35, rcadsp36, rcadsp37, rcadsp38, rcadsp39, rcadsp40, 
+rcadsp41, rcadsp42, rcadsp43, rcadsp44, rcadsp45, rcadsp46, rcadsp47).
+EXECUTE .
+
+
+
+
+
+***This creates and computes the raw scores for each RCADS-P subscale (not taking into account missing items). 
+COMPUTE RCADSP_sad_raw = SUM (rcadsp05, rcadsp09, rcadsp17, rcadsp18, rcadsp33, rcadsp46, rcadsp45).
+COMPUTE RCADSP_gad_raw = SUM (rcadsp01, rcadsp13, rcadsp22, rcadsp27, rcadsp35, rcadsp37).
+COMPUTE RCADSP_mdd_raw = SUM (rcadsp02, rcadsp06, rcadsp11, rcadsp15, rcadsp19, rcadsp21, rcadsp25, rcadsp29, rcadsp40, rcadsp47).
+COMPUTE RCADSP_pd_raw= SUM (rcadsp03, rcadsp14, rcadsp24, rcadsp26, rcadsp28, rcadsp34, rcadsp36, rcadsp39, rcadsp41).
+COMPUTE RCADSP_soc_raw= SUM (rcadsp04, rcadsp07, rcadsp08, rcadsp12, rcadsp20, rcadsp30, rcadsp32, rcadsp38, rcadsp43).
+COMPUTE RCADSP_ocd_raw = SUM (rcadsp10, rcadsp16, rcadsp23, rcadsp31, rcadsp42, rcadsp44).
+COMPUTE RCADSP_Depression_Total_raw = SUM (rcadsp02, rcadsp06, rcadsp11, rcadsp15, rcadsp19, rcadsp21, rcadsp25, rcadsp29, rcadsp40, rcadsp47).
+COMPUTE RCADSP_Anxiety_Total_raw = SUM (rcadsp01, rcadsp03, rcadsp04, rcadsp05, rcadsp07, rcadsp08, rcadsp09, rcadsp10, rcadsp12, rcadsp13, 
+rcadsp14, rcadsp16, rcadsp17, rcadsp18, rcadsp20, rcadsp22, rcadsp23, rcadsp24, rcadsp26, rcadsp27, rcadsp28, rcadsp30, rcadsp31, rcadsp32, rcadsp33, 
+rcadsp34, rcadsp35, rcadsp36, rcadsp37, rcadsp38, rcadsp39, rcadsp41, rcadsp42, rcadsp43, rcadsp44, rcadsp45, rcadsp46).
+COMPUTE RCADSP_Total_Score_raw = SUM (rcadsp01, rcadsp02, rcadsp03, rcadsp04, rcadsp05, rcadsp06, rcadsp07, rcadsp08, rcadsp09, rcadsp10, 
+rcadsp11, rcadsp12, rcadsp13, rcadsp14, rcadsp15, rcadsp16, rcadsp17, rcadsp18, rcadsp19, rcadsp20, rcadsp21, rcadsp22, rcadsp23, rcadsp24, rcadsp25, 
+rcadsp26, rcadsp27, rcadsp28, rcadsp29, rcadsp30, rcadsp31, rcadsp32, rcadsp33, rcadsp34, rcadsp35, rcadsp36, rcadsp37, rcadsp38, rcadsp39, rcadsp40, 
+rcadsp41, rcadsp42, rcadsp43, rcadsp44, rcadsp45, rcadsp46, rcadsp47).
+EXECUTE .
+
+
+
+**This prorates each RCADS-P subscale raw score, adjusting for missing data (via mean replacement). 
+IF RCADSP_sad_missing LE 2 RCADSP_sad_raw = (RCADSP_sad_raw/(7-RCADSP_sad_missing))*7.
+IF RCADSP_gad_missing LE 2 RCADSP_gad_raw = (RCADSP_gad_raw/(6-RCADSP_gad_missing))*6.
+IF RCADSP_pd_missing LE 2 RCADSP_pd_raw = (RCADSP_pd_raw/(9-RCADSP_pd_missing))*9.
+IF RCADSP_soc_missing LE 2 RCADSP_soc_raw = (RCADSP_soc_raw/(9-RCADSP_soc_missing))*9.
+IF RCADSP_ocd_missing LE 2 RCADSP_ocd_raw = (RCADSP_ocd_raw/(6-RCADSP_ocd_missing))*6.
+IF RCADSP_mdd_missing LE 2 RCADSP_mdd_raw = (RCADSP_mdd_raw/(10-RCADSP_mdd_missing))*10.
+IF RCADSP_Depression_Total_missing LE 2 RCADSP_Depression_Total_raw = (RCADSP_Depression_Total_raw/(10-RCADSP_Depression_Total_missing))*10.
+IF RCADSP_Anxiety_Total_missing LE 10 RCADSP_Anxiety_Total_raw = (RCADSP_Anxiety_Total_raw/(37-RCADSP_Anxiety_Total_missing))*37.
+IF RCADSP_Total_Score_missing LE 12 RCADSP_Total_Score_raw = (RCADSP_Total_Score_raw/(47-RCADSP_Total_Score_missing))*47.
+Execute. 
+
+
+**This deletes all RCADS-P subscale raw scores that have more than the allowable amount of missing data. 
+IF RCADSP_sad_missing > 2 RCADSP_sad_raw = $SYSMIS.
+IF RCADSP_gad_missing > 2 RCADSP_gad_raw = $SYSMIS.
+IF RCADSP_pd_missing > 2 RCADSP_pd_raw = $SYSMIS.
+IF RCADSP_soc_missing > 2 RCADSP_soc_raw = $SYSMIS.
+IF RCADSP_ocd_missing > 2 RCADSP_ocd_raw = $SYSMIS.
+IF RCADSP_mdd_missing > 2 RCADSP_mdd_raw = $SYSMIS.
+IF RCADSP_Depression_Total_missing > 2 RCADSP_Depression_Total_raw = $SYSMIS.
+Execute. 
+IF RCADSP_Anxiety_Total_missing > 10 
+or RCADSP_sad_missing > 2
+or RCADSP_gad_missing > 2
+or RCADSP_pd_missing > 2
+or RCADSP_soc_missing > 2
+or RCADSP_ocd_missing > 2 RCADSP_Anxiety_Total_raw = $SYSMIS.
+Execute. 
+IF RCADSP_Total_Score_missing > 12 
+or RCADSP_sad_missing > 2
+or RCADSP_gad_missing > 2
+or RCADSP_pd_missing > 2
+or RCADSP_soc_missing > 2
+or RCADSP_ocd_missing > 2 
+or RCADSP_mdd_missing > 2 RCADSP_Total_Score_raw = $SYSMIS.
+Execute. 
+
+
+
+
+***This creates and computes the T-scores for each RCADS-P subscale. 
+ ***Scoring T-scores for Boys.	
+IF (grade le 4) AND (sex = 1) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.71)*10)/2.93 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_gad_t = ((RCADSP_gad_raw - 4.11)*10)/3.00 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_ocd_t = ((RCADSP_ocd_raw - 2.04)*10)/2.43 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_pd_t = ((RCADSP_pd_raw - 1.91)*10)/1.90 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_sad_t = ((RCADSP_sad_raw - 4.29)*10)/3.00 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_soc_t = ((RCADSP_soc_raw - 8.44)*10)/3.88 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 20.78)*10)/10.52 + 50.	
+IF (grade le 4) AND (sex = 1) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 24.49)*10)/12.39 + 50.	
+
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.62)*10)/2.87 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_gad_t = ((RCADSP_gad_raw - 3.74)*10)/2.49 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_ocd_t = ((RCADSP_ocd_raw - 2.01)*10)/2.31 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_pd_t = ((RCADSP_pd_raw - 1.64)*10)/1.84 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_sad_t = ((RCADSP_sad_raw - 2.85)*10)/2.79 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_soc_t = ((RCADSP_soc_raw - 7.71)*10)/3.94 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 17.95)*10)/9.84 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 1) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 21.57)*10)/11.9 + 50.	
+
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.54)*10)/3.18 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_gad_t = ((RCADSP_gad_raw - 3.26)*10)/2.60 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_ocd_t = ((RCADSP_ocd_raw - 1.62)*10)/1.98 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_pd_t = ((RCADSP_pd_raw - 1.61)*10)/1.56 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_sad_t = ((RCADSP_sad_raw - 1.97)*10)/2.21 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_soc_t = ((RCADSP_soc_raw - 7.59)*10)/4.31 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 16.04)*10)/9.74 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 1) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 19.58)*10)/11.99 + 50.	
+
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_mdd_t = ((RCADSP_mdd_raw - 5.21)*10)/3.51 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_gad_t = ((RCADSP_gad_raw - 3.73)*10)/2.75 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_ocd_t = ((RCADSP_ocd_raw - 2.58)*10)/3.03 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_pd_t = ((RCADSP_pd_raw - 2.19)*10)/2.34 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_sad_t = ((RCADSP_sad_raw - 1.69)*10)/1.89 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_soc_t = ((RCADSP_soc_raw - 8.39)*10)/4.19 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 18.56)*10)/10.61 + 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 1) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 23.77)*10)/12.73 + 50.	
+
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.94)*10)/3.88 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_gad_t = ((RCADSP_gad_raw - 3.22)*10)/2.50 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_ocd_t = ((RCADSP_ocd_raw - 1.11)*10)/1.96 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_pd_t = ((RCADSP_pd_raw - 1.50)*10)/1.69 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_sad_t = ((RCADSP_sad_raw - 1.15)*10)/1.55 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_soc_t = ((RCADSP_soc_raw - 7.32)*10)/3.69 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 14.31)*10)/9.6 + 50.
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 1) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 18.24)*10)/12.7 + 50.	
+Exe.	
+	
+*** Scoring T-scores for Girls.	
+IF (grade le 4) AND (sex = 2) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.25)*10)/3.58 + 50.	
+IF (grade le 4) AND (sex = 2) RCADSP_gad_t = ((RCADSP_gad_raw - 4.00)*10)/2.87 + 50.	
+IF (grade le 4) AND (sex = 2) RCADSP_ocd_t = ((RCADSP_ocd_raw - 2.01)*10)/2.63 + 50.	
+IF (grade le 4) AND (sex = 2) RCADSP_pd_t = ((RCADSP_pd_raw - 1.87)*10)/2.61 + 50.	
+IF (grade le 4) AND (sex = 2) RCADSP_sad_t = ((RCADSP_sad_raw - 4.20)*10)/3.00 + 50.	
+IF (grade le 4) AND (sex = 2) RCADSP_soc_t = ((RCADSP_soc_raw - 8.01)*10)/3.87 + 50.	
+IF (grade le 4) AND (sex = 2) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 20.1)*10)/11.96 + 50.
+IF (grade le 4) AND (sex = 2) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 23.35)*10)/14.57 + 50.	
+
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.75)*10)/3.63 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_gad_t = ((RCADSP_gad_raw - 4.18)*10)/3.18 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_ocd_t = ((RCADSP_ocd_raw - 2.03)*10)/2.65 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_pd_t = ((RCADSP_pd_raw - 1.79)*10)/2.30 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_sad_t = ((RCADSP_sad_raw - 3.46)*10)/2.95 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_soc_t = ((RCADSP_soc_raw - 8.94)*10)/5.16 + 50.	
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 20.41)*10)/12.89 + 50.
+IF ((grade eq 5) OR (grade eq 6)) AND (sex = 2) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 24.15)*10)/15.82 + 50.	
+
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.6)*10)/3.37 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_gad_t = ((RCADSP_gad_raw - 3.23)*10)/2.54 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_ocd_t = ((RCADSP_ocd_raw - 1.41)*10)/1.94 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_pd_t = ((RCADSP_pd_raw - 1.82)*10)/1.98 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_sad_t = ((RCADSP_sad_raw - 2.08)*10)/2.33 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_soc_t = ((RCADSP_soc_raw - 8.62)*10)/4.65 + 50.	
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 17.17)*10)/10.63 + 50.
+IF ((grade eq 7) OR (grade eq 8)) AND (sex = 2) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 20.77)*10)/13.2 + 50.	
+
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_mdd_t = ((RCADSP_mdd_raw - 3.97)*10)/3.25 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_gad_t = ((RCADSP_gad_raw - 3.46)*10)/3.02 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_ocd_t = ((RCADSP_ocd_raw - 1.89)*10)/2.57 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_pd_t = ((RCADSP_pd_raw - 1.83)*10)/2.13 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_sad_t = ((RCADSP_sad_raw - 1.91)*10)/2.49 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_soc_t = ((RCADSP_soc_raw - 8.83)*10)/4.73 + 50.	
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 17.92)*10)/12.14 + 50.
+IF ((grade eq 9) OR (grade eq 10)) AND (sex = 2) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 21.89)*10)/14.39 + 50.	
+
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_mdd_t = ((RCADSP_mdd_raw - 4.91)*10)/3.17 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_gad_t = ((RCADSP_gad_raw - 3.76)*10)/2.28 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_ocd_t = ((RCADSP_ocd_raw - 1.8)*10)/2.34 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_pd_t = ((RCADSP_pd_raw - 2.04)*10)/2.27 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_sad_t = ((RCADSP_sad_raw - 1.92)*10)/1.98 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_soc_t = ((RCADSP_soc_raw - 8.35)*10)/4.38 + 50.	
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_Anxiety_Total_t = ((RCADSP_Anxiety_Total_raw - 17.88)*10)/10.54 + 50.
+IF ((grade eq 11) OR (grade eq 12)) AND (sex = 2) RCADSP_Total_Score_t = ((RCADSP_Total_Score_raw - 22.79)*10)/12.91 + 50.	
+EXECUTE.	
+
+
+
+
+****Compute RCADSP scale elevations. 
+Compute RCADSP_TOTAL_Elevation = $SYSMIS.
+If RCADSP_Total_Score_t < 65 RCADSP_TOTAL_Elevation = 0.
+If RCADSP_Total_Score_t GE 65 AND RCADSP_Total_Score_t < 70 RCADSP_TOTAL_Elevation = 1.
+If RCADSP_Total_Score_t GE 70 RCADSP_TOTAL_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_TOTAL_Elevation 'RCADSP_TOTAL_Elevation'.
+VALUE LABELS
+RCADSP_TOTAL_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADSP_Depression_Elevation = $SYSMIS.
+If RCADSP_MDD_T < 65 RCADSP_Depression_Elevation = 0.
+If RCADSP_MDD_T GE 65 AND RCADSP_MDD_T < 70 RCADSP_Depression_Elevation = 1.
+If RCADSP_MDD_T GE 70 RCADSP_Depression_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_Depression_Elevation 'RCADSP_Depression_Elevation'.
+VALUE LABELS
+RCADSP_Depression_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+
+Compute RCADSP_Anxiety_Elevation = $SYSMIS.
+If RCADSP_Anxiety_Total_t < 65 RCADSP_Anxiety_Elevation = 0.
+If RCADSP_Anxiety_Total_t GE 65 AND RCADSP_Anxiety_Total_t < 70 RCADSP_Anxiety_Elevation = 1.
+If RCADSP_Anxiety_Total_t GE 70 RCADSP_Anxiety_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_Anxiety_Elevation 'RCADSP_Anxiety_Elevation'.
+VALUE LABELS
+RCADSP_Anxiety_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADSP_GAD_Elevation = $SYSMIS.
+If RCADSP_GAD_T < 65 RCADSP_GAD_Elevation = 0.
+If RCADSP_GAD_T GE 65 AND RCADSP_GAD_T < 70 RCADSP_GAD_Elevation = 1.
+If RCADSP_GAD_T GE 70 RCADSP_GAD_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_GAD_Elevation 'RCADSP_GAD_Elevation'.
+VALUE LABELS
+RCADSP_GAD_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADSP_OCD_Elevation = $SYSMIS.
+If RCADSP_OCD_T < 65 RCADSP_OCD_Elevation = 0.
+If RCADSP_OCD_T GE 65 AND RCADSP_OCD_T < 70 RCADSP_OCD_Elevation = 1.
+If RCADSP_OCD_T GE 70 RCADSP_OCD_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_OCD_Elevation 'RCADSP_OCD_Elevation'.
+VALUE LABELS
+RCADSP_OCD_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADSP_PANIC_Elevation = $SYSMIS.
+If RCADSP_PD_T < 65 RCADSP_PANIC_Elevation = 0.
+If RCADSP_PD_T GE 65 AND RCADSP_PD_T < 70 RCADSP_PANIC_Elevation = 1.
+If RCADSP_PD_T GE 70 RCADSP_PANIC_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_PANIC_Elevation 'RCADSP_PANIC_Elevation'.
+VALUE LABELS
+RCADSP_PANIC_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADSP_SEPARATION_Elevation = $SYSMIS.
+If RCADSP_SAD_T < 65 RCADSP_SEPARATION_Elevation = 0.
+If RCADSP_SAD_T GE 65 AND RCADSP_SAD_T < 70 RCADSP_SEPARATION_Elevation = 1.
+If RCADSP_SAD_T GE 70 RCADSP_SEPARATION_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_SEPARATION_Elevation 'RCADSP_SEPARATION_Elevation'.
+VALUE LABELS
+RCADSP_SEPARATION_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+Compute RCADSP_SOCIAL_Elevation = $SYSMIS.
+If RCADSP_SOC_T < 65 RCADSP_SOCIAL_Elevation = 0.
+If RCADSP_SOC_T GE 65 AND RCADSP_SOC_T < 70 RCADSP_SOCIAL_Elevation = 1.
+If RCADSP_SOC_T GE 70 RCADSP_SOCIAL_Elevation = 2.
+EXECUTE.
+VARIABLE LABEL RCADSP_SOCIAL_Elevation 'RCADSP_SOCIAL_Elevation'.
+VALUE LABELS
+RCADSP_SOCIAL_Elevation
+0 'Normal'
+1 'Borderline'
+2 'Clinical'.
+EXECUTE.
+
+FREQUENCIES VARIABLES= 
+RCADSP_TOTAL_Elevation
+RCADSP_Depression_Elevation 
+RCADSP_Anxiety_Elevation
+RCADSP_GAD_Elevation
+RCADSP_OCD_Elevation
+RCADSP_PANIC_Elevation
+RCADSP_SEPARATION_Elevation
+RCADSP_SOCIAL_Elevation
+  /ORDER=ANALYSIS.
+
+
+
+
+*********************************************************************************************************************************************************************************************************************************************************************************.
