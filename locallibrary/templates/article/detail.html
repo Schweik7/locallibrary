@@ -1,25 +1,44 @@
 {% extends "base.html" %}
 {% load static %}
-
 <!-- 写入 base.html 中定义的 title -->
 {% block title %}
     文章详情
 {% endblock title %}
-
 <!-- 写入 base.html 中定义的 content -->
 {% block content %}
-
-<!-- 文章详情 -->
-<div class="container">
-    <div class="row">
-        <!-- 标题及作者 -->
-        <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
-        <div class="col-12 alert alert-success">作者：{{ article.author }}</div>
-        <!-- 文章正文 -->
-        <div class="col-12">
-            <p>{{ article.body | safe }}</p>
+    <!-- 文章详情 -->
+    <div class="container">
+        <div class="row">
+            <!-- 标题及作者 -->
+            <h1 class="col-12 mt-4 mb-4">{{ article.title }}</h1>
+            <div class="col-12 alert alert-success">
+                作者：{{ article.author }}
+                · <a href="#" onclick="confirm_safe_delete()">删除文章</a>
+                · <a href="{% url "article:article_update" article.id %}">编辑文章</a>
+                <form style="display:none;"
+                      id="safe_delete"
+                      action="{% url 'article:article_safe_delete' article.id %}"
+                      method="POST">
+                    {% csrf_token %}
+                    <button type="submit">发送</button>
+                </form>
+            </div>
+            <!-- 文章正文 -->
+            <div class="col-12">
+                <p>{{ article.body | safe }}</p>
+            </div>
         </div>
     </div>
-</div>
-
+    <script>
+    function confirm_safe_delete() {
+        layer.open({
+            title: "确认删除",
+            content: "确认删除这篇文章吗？",
+            yes: function(index, layero) {
+                $('form#safe_delete button').click();
+                layer.close(index);
+            }
+        })
+    }
+    </script>
 {% endblock content %}

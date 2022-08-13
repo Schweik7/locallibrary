@@ -27,6 +27,7 @@
     {% include 'footer.html' %}
     <!-- bootstrap.js 依赖 jquery.js 和popper.js，因此在这里引入 -->
     <script src="{% static 'jquery/jquery.js' %}"></script>
+    <script src="{% static 'layer/layer/layer.js' %}"></script>
     <script>
         $('div#article_body table').addClass('table table-bordered');
         $('div#article_body thead').addClass('thead-light');
