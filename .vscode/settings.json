@@ -1,3 +1,11 @@
 {
-    "python.formatting.provider": "black"
+    "python.formatting.provider": "black",
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "django_blog",
+            "database": "${workspaceFolder:locallibrary}/locallibrary/db.sqlite3"
+        }
+    ]
 }
