@@ -27,5 +27,7 @@ urlpatterns = [
     path("article/", include("article.urls", namespace="article")),
     path("", RedirectView.as_view(url="/article/article-list/")),  # 将路径函数的第一个参数留空以表示'/'
     path("userprofile/", include("userprofile.urls", namespace="userprofile")),
+    path('password-reset/', include('password_reset.urls')),
     # static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 # 导入数据模型ArticlePost
 from .models import ArticlePost
 import markdown
@@ -10,7 +10,18 @@ from django.http import HttpResponse
 from .forms import ArticlePostForm
 # 引入User模型
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 
+def article_list(request):
+    article_list = ArticlePost.objects.all()
+    paginator = Paginator(article_list, 1)
+    # 获取 url 中的页码
+    page = request.GET.get('page')
+    print(f"{page=}")
+    # 将导航对象相应的页码内容返回给 articles
+    articles = paginator.get_page(page)
+    context = { 'articles': articles }
+    return render(request, 'article/list.html', context)
 def article_detail(request, id):
     article = ArticlePost.objects.get(id=id)
     # 将markdown语法渲染成html样式
@@ -24,22 +35,14 @@ def article_detail(request, id):
     context = { 'article': article }
     return render(request, 'article/detail.html', context)
 
-def article_list(request):
-    # 取出所有博客文章
-    articles = ArticlePost.objects.all()
-    # 需要传递给模板（templates）的对象
-    context = { 'articles': articles }
-    # render函数：载入模板，并返回context对象
-    return render(request, 'article/list.html', context)
-
-
+@login_required(login_url='/userprofile/login/')
 def article_create(request):
     if request.method == "POST":
         article_post_form = ArticlePostForm(data=request.POST)
         # 判断提交的数据是否满足模型的要求
         if article_post_form.is_valid():
             new_article = article_post_form.save(commit=False)
-            new_article.author = User.objects.get(id=1)
+            new_article.author = User.objects.get(id=request.user.id)
             new_article.save()
             return redirect("article:article_list")
         else:

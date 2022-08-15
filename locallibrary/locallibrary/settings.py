@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     # 'catalog.apps.CatalogConfig',
     'article',
     'userprofile',
+    'password_reset', # 第三方的密码重置库
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +127,14 @@ STATIC_ROOT= BASE_DIR/'static'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_HOST = 'smtp.qq.com'
+EMAIL_HOST_USER = 'kasiski7@qq.com'
+EMAIL_HOST_PASSWORD = 'attutkfhgddjdige'
+EMAIL_PORT = 25
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'kasiski7的博客 <kasiski7@qq.com>'
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR/'media'

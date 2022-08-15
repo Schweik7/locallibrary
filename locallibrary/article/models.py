@@ -8,7 +8,7 @@ class ArticlePost(models.Model):
     body = models.TextField()
     created = models.DateTimeField(default=timezone.now)
     updated = models.DateTimeField(auto_now=True)
-    
+    total_views = models.PositiveIntegerField(default=0)
     class Meta:
         ordering = ('-created',)
         
