@@ -6,10 +6,13 @@ import csv
 import pathlib
 import os
 from dataclasses import dataclass, asdict, fields
+from datetime import date
+import click
 
 os.chdir(os.path.dirname(__file__))
+from quick import gui_it, gui_option
 
-f = r"C:\Users\Schweik7\Documents\WeChat Files\wxid_sbhkmgp6fh7z22\FileStorage\File\2022-08\RCADS_data.csv"
+# f = r"C:\Users\M\Desktop\182560963_1_心理访谈招募啦__175_175.csv"
 
 
 @dataclass
@@ -85,6 +88,7 @@ def SUM(*data: List[int]) -> int:
 
 
 def get_score(score, grade, sex):
+    print(grade, sex)
     RCADS25 = score
     # This counts the number of missing items per RCADS25-C subscale.
     RCADS25_C_Depression_Total_Missing = NMISS(
@@ -241,109 +245,89 @@ def get_score(score, grade, sex):
     ###########T Scores for the RCADS25-C Scales (updated on 2015_02_03).#######*
 
     # 3~4年级男生
-    if (grade <= 4) and (sex == 1):
+    elif (grade <= 4) and (sex == 1):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 9.90) * 10) / 4.93 + 50
-    if (grade <= 4) and (sex == 1):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 15.19) * 10
         ) / 7.09 + 50
-    if (grade <= 4) and (sex == 1):
         RCADS25_C_Total_Score_t = (
             (RCADS25_C_Total_Score_raw - 25.10) * 10
         ) / 11.10 + 50
 
     # 3~4年级女生
-    if (grade <= 4) and (sex == 2):
+    elif (grade <= 4) and (sex == 2):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 9.68) * 10) / 4.97 + 50
-    if (grade <= 4) and (sex == 2):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 16.25) * 10
         ) / 8.42 + 50
-    if (grade <= 4) and (sex == 2):
         RCADS25_C_Total_Score_t = (
             (RCADS25_C_Total_Score_raw - 25.93) * 10
         ) / 12.24 + 50
 
     # 5~6年级男生
-    if ((grade == 5) or (grade == 6)) and (sex == 1):
+    elif ((grade == 5) or (grade == 6)) and (sex == 1):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 7.13) * 10) / 4.22 + 50
-    if ((grade == 5) or (grade == 6)) and (sex == 1):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 11.63) * 10
         ) / 6.45 + 50
-    if ((grade == 5) or (grade == 6)) and (sex == 1):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 18.76) * 10) / 9.38 + 50
 
     # 5~6年级女生
-    if ((grade == 5) or (grade == 6)) and (sex == 2):
+    elif ((grade == 5) or (grade == 6)) and (sex == 2):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 8.03) * 10) / 5.00 + 50
-    if ((grade == 5) or (grade == 6)) and (sex == 2):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 13.49) * 10
         ) / 7.62 + 50
-    if ((grade == 5) or (grade == 6)) and (sex == 2):
         RCADS25_C_Total_Score_t = (
             (RCADS25_C_Total_Score_raw - 21.53) * 10
         ) / 11.73 + 50
 
     # 7~8年级男生
-    if ((grade == 7) or (grade == 8)) and (sex == 1):
+    elif ((grade == 7) or (grade == 8)) and (sex == 1):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 7.56) * 10) / 3.75 + 50
-    if ((grade == 7) or (grade == 8)) and (sex == 1):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 10.48) * 10
         ) / 5.36 + 50
-    if ((grade == 7) or (grade == 8)) and (sex == 1):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 18.04) * 10) / 7.92 + 50
 
     # 7~8年级女生
-    if ((grade == 7) or (grade == 8)) and (sex == 2):
+    elif ((grade == 7) or (grade == 8)) and (sex == 2):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 8.08) * 10) / 4.34 + 50
-    if ((grade == 7) or (grade == 8)) and (sex == 2):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 12.74) * 10
         ) / 6.22 + 50
-    if ((grade == 7) or (grade == 8)) and (sex == 2):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 20.82) * 10) / 9.46 + 50
 
     # 9~10年级男生
-    if ((grade == 9) or (grade == 10)) and (sex == 1):
+    elif ((grade == 9) or (grade == 10)) and (sex == 1):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 7.50) * 10) / 4.18 + 50
-    if ((grade == 9) or (grade == 10)) and (sex == 1):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 9.70) * 10
         ) / 5.45 + 50
-    if ((grade == 9) or (grade == 10)) and (sex == 1):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 17.20) * 10) / 8.53 + 50
 
     # 9~10年级女生
-    if ((grade == 9) or (grade == 10)) and (sex == 2):
+    elif ((grade == 9) or (grade == 10)) and (sex == 2):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 8.14) * 10) / 4.37 + 50
-    if ((grade == 9) or (grade == 10)) and (sex == 2):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 11.31) * 10
         ) / 5.33 + 50
-    if ((grade == 9) or (grade == 10)) and (sex == 2):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 19.45) * 10) / 8.63 + 50
 
     # 11~12年级男生
-    if (grade >= 11) and (sex == 1):
+    elif (grade >= 11) and (sex == 1):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 7.64) * 10) / 4.37 + 50
-    if (grade >= 11) and (sex == 1):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 9.96) * 10
         ) / 4.32 + 50
-    if (grade >= 11) and (sex == 1):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 17.60) * 10) / 7.24 + 50
 
     # 11~12年级女生
-    if (grade >= 11) and (sex == 2):
+    elif (grade >= 11) and (sex == 2):
         RCADS25_C_MDD_T = ((RCADS25_C_Depression_Total_raw - 8.59) * 10) / 3.67 + 50
-    if (grade >= 11) and (sex == 2):
         RCADS25_C_Anxiety_Total_t = (
             (RCADS25_C_Anxiety_Total_raw - 11.50) * 10
         ) / 5.34 + 50
-    if (grade >= 11) and (sex == 2):
         RCADS25_C_Total_Score_t = ((RCADS25_C_Total_Score_raw - 20.09) * 10) / 7.79 + 50
 
     print(
@@ -399,34 +383,62 @@ def get_score(score, grade, sex):
     )
 
 
-person_data_list = []
-with open(f, encoding="utf-8-sig") as csvfile:  # 不用sig的话会有bom头 \uffee
-    reader = csv.DictReader(csvfile)
-    for row in reader:
-        RCADS25 = [-1]
-        insert_tmp = [row["序号"], row["您的姓名或称呼"]]
-        # row=OrderedDict(row) # python 3.7以上,dict将保持插入序
-        for k, v in row.items():
-            if k[0].isdigit():
-                RCADS25.append(int(v))
-        if len(RCADS25) == 26:
-            insert_tmp.extend(
-                get_score(
-                    score=RCADS25,
-                    grade=min(int(row["您的年龄"]) - 6, 12),
-                    sex={"男": 1, "女": 2}[row["您的性别"]],
-                )
-            )
-            p = Person(*insert_tmp)
-            print(p)
-        else:
-            print("个数不对")
-        person_data_list.append(asdict(p))
+output_file = f"RCADS_analysis_{date.today()}.csv"
+# @gui_option()
+@click.command()
+@click.option(
+    "-i",
+    "--input",
+    "filename",
+    default="your_csv_name",
+    help="需要处理的CSV文件",
+    required=True,
+)
+@click.option(
+    "-o", "--output", "output", default=output_file, help="输出文件", required=True
+)
+def interactive_RCADS_25(filename: str, output: str):
+    filename = filename.strip('"')
+    output = output.strip('"')
+    person_data_list = []
+    with open(
+        filename,
+        encoding="gbk",
+    ) as csvfile:  # 不用sig的话会有bom头 \uffee 如果office另存为csv的话，就是utf8；用WPS的话是gbk
+        reader = csv.DictReader(csvfile)
+        for row in reader:
+            RCADS25 = [-1]
+            if row["15、这里请选择节日快乐"] == "节日快乐":
+                insert_tmp = [row["序号"], row["1、您的姓名或称呼"]]
+                # row=OrderedDict(row) # python 3.7以上,dict将保持插入序
+                ques_no = set(range(11, 37)) - set([15])  # 题号是11~~36题，不包括15题
+                for k, v in row.items():
+                    if k[0].isdigit() and k[1].isdigit() and int(k[0:2]) in ques_no:
+                        RCADS25.append(int(v))
+                if len(RCADS25) == 26:
+                    insert_tmp.extend(
+                        get_score(
+                            score=RCADS25,
+                            grade=min(int(row["3、您的年龄"]) - 6, 12),
+                            sex={"男": 1, "女": 2}[row["2、您的性别"]]
+                            if row["2、您的性别"] in ["男", "女"]
+                            else randint(1, 2),
+                        )
+                    )
+                    p = Person(*insert_tmp)
+                    print(p)
+                else:
+                    print("个数不对")
+                person_data_list.append(asdict(p))
 
-with open(
-    "RCADS_analysis.csv", "w", encoding="gb2312", newline=""
-) as csvfile:  # newline为空才能紧凑
-    writer = csv.DictWriter(csvfile, list(map(lambda x: x.name, fields(Person))))
-    print(list(map(lambda x: x.name, fields(Person))))
-    writer.writeheader()
-    writer.writerows(person_data_list)
+    with open(
+        output, "w", encoding="gbk", newline=""  # gb2312仅有简体中文
+    ) as csvfile:  # newline为空才能紧凑
+        writer = csv.DictWriter(csvfile, list(map(lambda x: x.name, fields(Person))))
+        print(list(map(lambda x: x.name, fields(Person))))
+        writer.writeheader()
+        writer.writerows(person_data_list)
+        print("成功了")
+
+
+gui_it(interactive_RCADS_25)
